@@ -1,140 +1,83 @@
-import React, { useContext, useState } from 'react';
-import './Navbar.css'; // Import CSS
-import logo from '../Assets/logo.png';
-import cart_icon from '../Assets/cart_icon.png';
-import { Link } from 'react-router-dom';
-import { ShopContext } from '../../Context/ShopContext';
+import React, { useContext, useState } from "react";
+import "./Navbar.css"; // Updated CSS for vertical navbar and search bar
+import { Link, useNavigate } from "react-router-dom";
+import { ShopContext } from "../../Context/ShopContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faHome, faInfo, faBriefcase, faPaperPlane, faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
-  //======================== USE STATES ========================//
-
-  const [menu, setMenu] = useState("shop");
   const { getTotalCartItems } = useContext(ShopContext);
-  const [expanded, setExpanded] = useState(true); // Manage sidebar state
-  const [openDropdown, setOpenDropdown] = useState(null); // State for dropdown
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false); // State to control dropdown visibility
+  const navigate = useNavigate();
+
+  const toggleCategoryDropdown = () => {
+    setIsCategoryOpen(!isCategoryOpen);
+  };
+
+  const handleCategoryClick = (category) => {
+    navigate(`/${category}`);
+  };
 
   
-  //======================== DECLARATIVE ========================//
-
-  const toggleSidebar = () => {
-    setExpanded(!expanded);
-  };
-
-  const toggleDropdown = (menu) => {
-    setOpenDropdown(openDropdown === menu ? null : menu);
-  };
-
-  const handleMenuItemClick = (menuItem) => {
-    setMenu(menuItem);
-  };
-
-  const scrollToElement = (targetId, offset = 50) => {
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-      const offsetPosition = targetElement.offsetTop - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-      setExpanded(false); // Collapse sidebar after navigation
-    }
-  };
-
-  // Menu items from Navbar
-  const menuItems = [
-    { name: "Shop", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
-  ];
 
   return (
-    <div className="sidebar2-container">
-      {/* Top Vertical Sidebar */}
-      <nav
-        id="sidebar2"
-        className={`sidebar2 ${expanded ? 'expanded' : ''}`}
-      >
-        <ul className="nav-grid">
-          
+    <>
+      {/* Search Bar with Button */}
+      <div className="search-bar">
+        <input type="text" placeholder="Search..." className="search-input" />
+        <button className="search-btn">
+          <FontAwesomeIcon icon={faSearch} />
+        </button>
+      </div>
 
-        <div className="nav-logo">
-                    <img src={logo} alt="Logo" />
-                    <p>JUSME</p>
-        </div>
-
-          <ul className={`nav-menu`}>
-            
-            {menuItems.map((item) => (
-              <li key={item.name} onClick={() => handleMenuItemClick(item.name)}>
-                <Link to={item.path}>{item.name}</Link>
-                {menu === item.name && <hr />}
-              </li>
-            ))}
-            <li className="dropdown" onClick={() => toggleDropdown("categories")}>
-              <Link to="#">Categories
-                <svg
-                  className={`arrow ${openDropdown === "categories" ? "open" : ""}`}
-                  width="12"
-                  height="8"
-                  viewBox="0 0 12 8"
-                  style={{ marginLeft: '10px' }} 
-                >
-                  <path d="M0 0l6 8 6-8H0z" fill="black" />
-                </svg>
-              </Link>
-              {openDropdown === "categories" && (
-                <ul className="dropdown-menu">
-                  <li>
-                    <Link to="/mens">
-                      <button className="category-button">Mens</button>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/womens">
-                      <button className="category-button">Womens</button>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/kids">
-                      <button className="category-button">Kids</button>
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
-
-          </ul>
-
-          <div className="nav-login-cart">
-
-              {localStorage.getItem('auth-token')
-              ?<button onClick={() => {localStorage.removeItem('auth-token');window.location.replace('/')}}>Logout</button>
-              :<Link to="/login" className="login-button">
-              <button className="login-btn">Login</button>
-              </Link>}
-
-
-                <Link to="/cart" className="cart-button">
-                    <button className="cart-icon-button">
-                        <img src={cart_icon} alt="Cart" />
-                    </button>
-                </Link>
-                <div className="nav-cart-count">{getTotalCartItems()}</div>
-            </div>
-
-
+      <div className="navbar-vertical">
+        <ul className="menu">
+          {/* Home */}
+          <li className="menu_list">
+            <span className="front">
+              <FontAwesomeIcon icon={faHome} />
+            </span>
+            <Link to="/" className="side">Home</Link>
+          </li>
+          {/* About */}
+          <li className="menu_list">
+            <span className="front">
+              <FontAwesomeIcon icon={faInfo} />
+            </span>
+            <Link to="/about" className="side">About</Link>
+          </li>
+          {/* Category (with dropdown) */}
+          <li className="menu_list category" onMouseEnter={toggleCategoryDropdown} onMouseLeave={toggleCategoryDropdown}>
+            <span className="front">
+              <FontAwesomeIcon icon={faBriefcase} />
+            </span>
+            <Link to="#" className="side">Category</Link>
+            {/* Dropdown Menu */}
+            <ul className={`dropdown-menu ${isCategoryOpen ? 'open' : ''}`}>
+            <li className="dropdown-item" onClick={() => handleCategoryClick('mens')}>Men</li>
+              <li className="dropdown-item" onClick={() => handleCategoryClick('womens')}>Women</li>
+              <li className="dropdown-item" onClick={() => handleCategoryClick('kids')}>Kids</li>
+            </ul>
+          </li>
+          {/* Contact */}
+          <li className="menu_list">
+            <span className="front">
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </span>
+            <Link to="/contact" className="side">Contact</Link>
+          </li>
+          {/* Cart */}
+          <li className="menu_list">
+            <span className="front">
+              <FontAwesomeIcon icon={faCartShopping} />
+            </span>
+            <Link to="/cart" className="side">
+              Cart <span className="cart-count">{getTotalCartItems()}</span>
+            </Link>
+          </li>
         </ul>
-      </nav>
-
-      {/* Toggle Button */}
-      <button
-        className="toggle-btn"
-        style={{ top: expanded ? '125px' : '10px' }}
-        onClick={toggleSidebar}
-      >
-        <span id="arrow-icon">{expanded ? '▲' : '▼'}</span>
-      </button>
-    </div>
+      </div>
+    </>
   );
 };
 

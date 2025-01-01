@@ -2,9 +2,6 @@
   text-align: center;
 }
 
-body {
-    padding-top: 70px; /* Adjust based on your navbar height */
-}
 
 .App-logo {
   height: 40vmin;
@@ -40,3 +37,7 @@ body {
     transform: rotate(360deg);
   }
 }
+
+
+
+

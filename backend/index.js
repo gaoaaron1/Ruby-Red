@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 // Database Connection With MongoDB
-mongoose.connect("mongodb+srv://Boltstorms:Wepktr1xolc@cluster0.6w5rt.mongodb.net/JusMe");
+mongoose.connect("mongodb+srv://Boltstorms:Wepktr1xolc@cluster0.2vota.mongodb.net/Ruby&Red");
 
 // API Creation 
 app.get("/", (req, res)=> {
