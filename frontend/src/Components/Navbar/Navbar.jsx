@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import { faHome, faInfo, faBriefcase, faPaperPlane, faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
+import '../Assets/logo.png';
 
 const Navbar = () => {
   const { getTotalCartItems } = useContext(ShopContext);
@@ -29,6 +30,19 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faSearch} />
         </button>
       </div>
+
+    <div className="nav-menu">
+      {localStorage.getItem('auth-token')
+          ? <li onClick={() => {localStorage.removeItem('auth-token'); window.location.replace('/')}}>Logout</li>
+          : <li onClick={() => navigate('/login')}>Login</li>}
+    </div>
+
+
+
+
+
+
+
 
       <div className="navbar-vertical">
         <ul className="menu">
@@ -71,9 +85,12 @@ const Navbar = () => {
             <span className="front">
               <FontAwesomeIcon icon={faCartShopping} />
             </span>
+
+
             <Link to="/cart" className="side">
               Cart <span className="cart-count">{getTotalCartItems()}</span>
             </Link>
+
           </li>
         </ul>
       </div>

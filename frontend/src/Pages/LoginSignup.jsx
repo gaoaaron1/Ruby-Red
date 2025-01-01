@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
+import AboutVideo from '../Components/Assets/1231.mp4';
 
 const LoginSignup = () => {
 
@@ -58,7 +59,11 @@ const LoginSignup = () => {
 
     return (
         <div className="loginsignup">
+            
             <div className="loginsignup-container">
+                <video className="about-video" autoPlay loop muted>
+                    <source src={AboutVideo} type="video/mp4" />
+                </video>
                 <h1>{state}</h1>
                 <div className="loginsignup-fields">
                     {state==="Sign Up"?<input name='username' value={formData.username} onChange={changeHandler} type="text" placeholder="Your Name" />:<></>}
